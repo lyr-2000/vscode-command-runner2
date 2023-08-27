@@ -196,8 +196,5 @@
 		"id": "c4acb5b7-168f-4561-86ef-79352610787e",
 		"publisherDisplayName": "edonet",
 		"publisherId": "56102209-e938-4a27-8dad-976ac027ac55"
-	},
-	"dependencies": {
-		"vscode": "^1.1.37"
-	}
+	}	
 }

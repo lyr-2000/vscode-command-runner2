@@ -217,7 +217,11 @@ export default class Command {
                 if (!theFinalCmd) {
                     continue
                 }
-                await this.waitTerminalForExit(null,theFinalCmd, {terminalOptions...,name:terminalOptions.name+'-'+String(i+1)+':'+theFinalCmd.substring(0,10)})
+                let name = terminalOptions.name+'-'+String(i+1)+':'+theFinalCmd.substring(0,10)
+                // let cur = {terminalOptions...}
+                // cur.name = name
+                terminalOptions.name = name
+                await this.waitTerminalForExit(null,theFinalCmd, terminalOptions)
             } catch (e) {
                 console.error(e)
             }
