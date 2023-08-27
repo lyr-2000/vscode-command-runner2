@@ -38,7 +38,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
     // 注册【运行】命令
     context.subscriptions.push(
-        vscode.commands.registerCommand('command-runner.run', async (opts: CommandOptions = {}, files?: vscode.Uri[]) => {
+        vscode.commands.registerCommand('command-runner2.run', async (opts: CommandOptions = {}, files?: vscode.Uri[]) => {
             const command = new Command(context);
             const cmd = opts.command || opts.cmd || '';
 
@@ -80,7 +80,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
     // 注册【在终端运行】命令
     context.subscriptions.push(
-        vscode.commands.registerCommand('command-runner.runInTerminal', ({ terminal }: CommandOptions = {}) => {
+        vscode.commands.registerCommand('command-runner2.runInTerminal', ({ terminal }: CommandOptions = {}) => {
             const command = new Command(context);
 
             // 兼容终端名参数
