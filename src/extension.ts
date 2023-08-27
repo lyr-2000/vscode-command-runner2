@@ -42,6 +42,7 @@ export function activate(context: vscode.ExtensionContext): void {
             const command = new Command(context);
             const cmd = opts.command || opts.cmd || '';
 
+            
             // 兼容终端名参数
             if (typeof opts.terminal === 'string') {
                 opts.terminal = { name: opts.terminal };
@@ -57,6 +58,16 @@ export function activate(context: vscode.ExtensionContext): void {
                 clipboardFiles.split(/\r?\n/).forEach(f => command.addFile(f));
             }
 
+            // 判断是否是数组类型
+            // const target = command.commands[cmd]
+            // debugger;
+            // console.log('DEBUG ',typeof target,Array.isArray(target),target?.length,target?.args)
+
+            // if( Array.isArray(target) ) {
+            //     console.log('ISARRAY')
+            //     // cmd.forEach( c => command.addFile(c) );
+            //     return command.executeMultipleCommand(target, opts.terminal);
+            // }
             // 执行命令
             if (cmd) {
                 return command.execute(command.commands[cmd] || cmd, opts.terminal);

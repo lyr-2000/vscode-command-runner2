@@ -33,7 +33,7 @@ export type TerminalOptions = Partial<vscode.TerminalOptions> & {
  * 创建终端
  *****************************************
  */
-function createTerminal(options: vscode.TerminalOptions) {
+function createTerminal(options: vscode.TerminalOptions):vscode.Terminal {
     const { window } = vscode;
     const { name } = options;
 
@@ -146,19 +146,136 @@ export default class Command {
             const cmd = await vscode.window.showQuickPick(
                 keys, { placeHolder: 'Type or select command to run' }
             );
-
+            // debugger;
             // 缓存最近列表
             this.context.workspaceState.update('COMMAND_RUNNER_RECENT', [cmd, ...keys]);
-
-            // 执行命令
-            if (cmd) {
-                await this.execute(commands[cmd], options);
+            if (!cmd) {
+                return
             }
+            const target = commands[cmd]
+            // 执行命令
+            if (Array.isArray(target)) {
+                await this.executeMultipleCommand(target, options);
+            } else {
+                await this.execute(target, options);
+            }
+
+
         } catch (err) {
             // do nothings;
         }
     }
+    // 执行一组命令
+    public async executeMultipleCommand(commands: string[], options?: TerminalOptions) {
+        // for (let  i=0;i<commands.length;i++) {
+        //     // options?.autoClear = true
+        //     await this.execute(commands[i], options);
+        // }
+        const { autoClear, autoFocus, ...terminalOptions }: TerminalOptions = {
+            ...this.$accessor.config('command-runner.terminal'),
+            ...options,
+            hideFromUser: false,
+        };
 
+
+        // 预设数据
+        const predefined = {
+            selectedFile: this.$files[0] || '',
+            selectedFiles: this.$files.join(' '),
+        };
+        if (commands == null || commands.length == 0) {
+            return
+        }
+        // const terminal = createTerminal(terminalOptions)
+        // // 显示终端
+        // if (autoFocus) {
+        //     terminal.show(true);
+        // }else {
+        //     terminal.show(false)
+        // }
+
+        // 清空终端
+        if (autoClear) {
+            await vscode.commands.executeCommand('workbench.action.terminal.clear');
+        }
+
+        for (let i = 0; i < commands.length; i++) {
+            // options?.autoClear = true
+            // 获取命令
+            let cmd = commands[i]
+            const command = this.$accessor.config('command-runner.autoAppendSelectedFiles')
+                ? cmd + ' ' + this.$files.join(' ')
+                : cmd;
+
+            
+            await vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup')
+            // 写入命令
+            let theFinalCmd = await this.resolve(command, predefined)
+
+
+            try {
+                if (!theFinalCmd) {
+                    continue
+                }
+                await this.waitTerminalForExit(null,theFinalCmd, {terminalOptions...,name:terminalOptions.name+'-'+String(i+1)+':'+theFinalCmd.substring(0,10)})
+            } catch (e) {
+                console.error(e)
+            }
+        }
+
+        // 输出命令信息
+        // console.log('--> Run Command:', command);
+    }
+    // public async waitForTerminalStateChange(terminal0: any, command, terminalOptions) {
+    //     const terminal = terminal0 || createTerminal(terminalOptions);
+    //     // terminal.show();
+    //     terminal.sendText(command, true);
+
+    //     return new Promise((resolve, reject) => {
+    //         // vscode.window.onDidOpenTerminal()
+    //         // debugger;
+    //         debugger;
+    //         const  dd = vscode.window.onDidWriteTerminalData( (e) => {
+    //             debugger;
+    //             dd.dispose()
+    //             resolve(e);
+    //         })
+
+            
+
+    //     });
+    // }
+    // it can wait for command exit;
+    public async waitTerminalForExit(
+        terminal0: any,
+        command: string,
+        terminalOptions: any,
+        // shellPath?: string,
+        // name?: string,
+        // location?: vscode.TerminalLocation
+    ): Promise<vscode.TerminalExitStatus> {
+        const terminal = terminal0 || createTerminal(terminalOptions);
+        // terminal.show();
+        terminal.show(true);
+        terminal.sendText(command, false);
+        terminal.sendText("; exit");
+
+        return new Promise((resolve, reject) => {
+
+            const disposeToken = vscode.window.onDidCloseTerminal(
+                async (closedTerminal) => {
+                    if (closedTerminal === terminal) {
+                        disposeToken.dispose();
+                        if (terminal.exitStatus !== undefined) {
+                            resolve(terminal.exitStatus);
+                        } else {
+                            reject("Terminal exited with undefined status");
+                        }
+                    }
+                }
+            );
+        });
+    }
     /* 执行命令 */
     public async execute(cmd: string, options?: TerminalOptions) {
         const { autoClear, autoFocus, ...terminalOptions }: TerminalOptions = {
@@ -166,13 +283,15 @@ export default class Command {
             ...options,
             hideFromUser: false,
         };
-
+        // debugger;
         // 创建终端
         const terminal = createTerminal(terminalOptions);
 
         // 显示终端
         if (autoFocus) {
             terminal.show(true);
+        }else {
+            terminal.show(false);
         }
 
         // 清空终端
@@ -195,7 +314,7 @@ export default class Command {
         terminal.sendText(await this.resolve(command, predefined));
 
         // 输出命令信息
-        console.log('--> Run Command:', command);
+        // console.log('--> Run Command:', command);
     }
 
     /* 执行选择的文字 */

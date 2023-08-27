@@ -14,10 +14,17 @@ const assert = require('assert');
 // const myExtension = require('../extension');
 
 // Defines a Mocha test suite to group tests of similar kind together
+import Command, { TerminalOptions } from '../src/Command';
 suite("Extension Tests", function() {
 
     // Defines a Mocha unit test
+    test("exec commands",function () {
+        const command = new Command(context);
+        const cmd = opts.command || opts.cmd || '';
+        
+    })
     test("Something 1", function() {
+        console.log('helloworld')
         assert.equal(-1, [1, 2, 3].indexOf(5));
         assert.equal(-1, [1, 2, 3].indexOf(0));
     });

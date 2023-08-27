@@ -1,3 +1,22 @@
 // Place your settings in this file to overwrite default and user settings.
 {
+    "i18n-ally.localesPaths": [],
+    "command-runner.commands": {
+        // set 
+        // # vi /etc/inputrc
+        // set enable-bracketed-paste on
+        // set disable-completion on
+        "go.format":"IFS=;text=$(cat <<EOF\n${selectedText}\n\nEOF\n); echo $text | gofmt | iconv -f UTF-8 -t GBK | clip",
+        "go.input.format":"IFS=;text=$(cat <<EOF\n${input}\n\nEOF\n); echo $text | gofmt | iconv -f UTF-8 -t GBK | clip",
+        "cht.sh":"${command:workbench.action.splitEditor}${command:workbench.action.files.newUntitledFile}IFS=;text=$(curl -s cht.sh/${input}?style=bw); echo $text | clip",
+        // sleep 2\n${command:editor.action.clipboardPasteAction}
+        "test":"echo ${fileExtname}",
+        "echo workspaceFolder": "echo '${workspaceFolder}'",
+        "demo": ["echo helloworld;","echo 'bbb'"],
+        "demo.array":
+        [
+            "${command:workbench.action.splitEditor}${command:workbench.action.files.newUntitledFile}IFS=;text=$(curl -s cht.sh/${input}?style=bw); echo $text | clip",
+            "${command:editor.action.clipboardPasteAction}",
+        ]
+    },
 }

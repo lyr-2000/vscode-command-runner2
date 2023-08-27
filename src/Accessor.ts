@@ -93,7 +93,7 @@ export default class Accessor {
     }
 
     /* 获取命令集 */
-    commands(): Record<string, string> {
+    commands(): Record<string, any> {
         return this.$variable.commands();
     }
 

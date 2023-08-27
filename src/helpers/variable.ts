@@ -321,7 +321,7 @@ export default () => cache({
     },
 
     /* 命令集 */
-    commands(): Record<string, string> {
+    commands(): Record<string, any> {
         return {
             ...this.config().get('command-runner.commands'),
             ...this.package()['commands'] as object,
