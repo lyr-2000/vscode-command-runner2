@@ -1,200 +1,200 @@
 {
-	"name": "vscode-command-runner2",
-	"displayName": "Command Runner2",
-	"description": "vscode custom shell command runner, it is a fork version for vscode-command-runner",
-	"version": "0.0.124",
-	"icon": "images/logo.png",
-	"publisher": "linyangrui",
-	"engines": {
-		"vscode": "^1.61.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCommand:command-runner2.run",
-		"onCommand:command-runner2.runInTerminal"
-	],
-	"enabledApiProposals": [
+    "name": "vscode-command-runner2",
+    "displayName": "Command Runner2",
+    "description": "vscode custom shell command runner, it is a fork version for vscode-command-runner2",
+    "version": "0.0.124",
+    "icon": "images/logo.png",
+    "publisher": "linyangrui",
+    "engines": {
+        "vscode": "^1.61.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:command-runner2.run",
+        "onCommand:command-runner2.runInTerminal"
+    ],
+    "enabledApiProposals": [
 
-	],
-	"main": "./dist/extension",
-	"scripts": {
-		"build": "yarn clean && yarn compile && vsce package",
-		"compile": "tsc -p ./",
-		"lint": "eslint src --ext ts",
-		"watch": "tsc -watch -p ./",
-		"symlink": "node scripts/symlink.js",
-		"vscode:prepublish": "yarn run compile",
-		"clean": "rimraf ./dist"
-	},
-	"contributes": {
-		"commands": [
-			{
-				"command": "command-runner.run",
-				"title": "Run Command"
-			},
-			{
-				"command": "command-runner.runInTerminal",
-				"title": "Run In Terminal"
-			}
-		],
-		"configuration": {
-			"type": "object",
-			"title": "Run Command Configuration",
-			"properties": {
-				"command-runner.terminal.name": {
-					"type": "string",
-					"default": "",
-					"description": "Specifies the terminal name to execute the command.",
-					"scope": "resource"
-				},
-				"command-runner.terminal.cwd": {
-					"type": "string",
-					"description": "A path or Uri for the current working directory to be used for the terminal.",
-					"scope": "resource"
-				},
-				"command-runner.terminal.env": {
-					"type": "string",
-					"description": "Object with environment variables that will be added to the VS Code process.",
-					"scope": "resource"
-				},
-				"command-runner.terminal.shellPath": {
-					"type": "string",
-					"description": "A path to a custom shell executable to be used in the terminal.",
-					"scope": "resource"
-				},
-				"command-runner.terminal.shellArgs": {
-					"type": [
-						"string",
-						"array"
-					],
-					"description": "Args for the custom shell executable. A string can be used on Windows only which allows specifying shell args in command-line format.",
-					"scope": "resource"
-				},
-				"command-runner.terminal.autoClear": {
-					"type": "boolean",
-					"default": true,
-					"description": "Clear the content of terminal before execute the command.",
-					"scope": "resource"
-				},
-				"command-runner.terminal.autoFocus": {
-					"type": "boolean",
-					"default": true,
-					"description": "Focus the terminal when execute the command.",
-					"scope": "resource"
-				},
-				"command-runner.commands": {
-					"type": "object",
-					"default": {},
-					"description": "Set the custom command to run.",
-					"scope": "resource"
-				},
-				"command-runner.autoAppendSelectedFiles": {
-					"type": "boolean",
-					"default": false,
-					"description": "Focus the terminal when execute the command.",
-					"scope": "resource"
-				},
-				"command-runner.showRunCommandInEditorContextMenu": {
-					"type": "boolean",
-					"default": true,
-					"description": "Show 'Run Command' in editor context menu",
-					"scope": "resource"
-				},
-				"command-runner.showRunCommandInExplorerContextMenu": {
-					"type": "boolean",
-					"default": true,
-					"description": "Show 'Run Command' in explorer context menu",
-					"scope": "resource"
-				}
-			}
-		},
-		"keybindings": [
-			{
-				"command": "command-runner.run",
-				"key": "ctrl+shift+r",
-				"mac": "ctrl+shift+r"
-			},
-			{
-				"command": "command-runner.runInTerminal",
-				"key": "ctrl+alt+r",
-				"mac": "ctrl+alt+r"
-			}
-		],
-		"menus": {
-			"editor/context": [
-				{
-					"when": "!inOutput && config.command-runner.showRunCommandInEditorContextMenu",
-					"command": "command-runner.run",
-					"group": "navigation"
-				},
-				{
-					"when": "editorHasSelection && !inOutput && config.command-runner.showRunCommandInEditorContextMenu",
-					"command": "command-runner.runInTerminal",
-					"group": "navigation"
-				}
-			],
-			"explorer/context": [
-				{
-					"when": "config.command-runner.showRunCommandInExplorerContextMenu",
-					"command": "command-runner.run",
-					"group": "navigation"
-				}
-			]
-		}
-	},
-	"commands": {
-		"file": "cat ${file}",
-		"fileBasename": "echo ${fileBasename}",
-		"fileBasenameNoExtension": "echo ${fileBasenameNoExtension}",
-		"fileDirname": "echo ${fileDirname}",
-		"fileExtname": "echo ${fileExtname}",
-		"relativeFile": "echo ${relativeFile}",
-		"relativeFileNoExtension": "echo ${relativeFileNoExtension}",
-		"relativeFileDirname": "echo ${relativeFileDirname}",
-		"lineNumber": "echo ${lineNumber}",
-		"lineNumbers": "echo ${lineNumbers}",
-		"columnNumber": "echo ${columnNumber}",
-		"columnNumbers": "echo ${columnNumbers}",
-		"selectedFile": "echo ${selectedFile}",
-		"selectedFiles": "echo ${selectedFiles}",
-		"selectedPosition": "echo ${selectedPosition}",
-		"selectedPositionList": "echo ${selectedPositionList}",
-		"selectedLocation": "echo ${selectedLocation}",
-		"selectedLocationList": "echo ${selectedLocationList}",
-		"selectedText": "echo ${selectedText}",
-		"selectedTextList": "echo ${selectedTextList}",
-		"selectedTextSection": "echo ${selectedTextSection}",
-		"workspaceFolder": "echo ${workspaceFolder}",
-		"workspaceFolderBasename": "echo ${workspaceFolderBasename}",
-		"homedir": "echo ${homedir}",
-		"tmpdir": "echo ${tmpdir}",
-		"env": "echo '${env:PATH}'",
-		"config": "echo ${config:editor.fontSize}",
-		"command": "${command:workbench.action.openRecent}"
-	},
-	"bugs": {
-		"url": "https://github.com/edonet/vscode-command-runner/issues",
-		"email": "edonet@163.com"
-	},
-	"homepage": "https://github.com/edonet/vscode-command-runner/blob/master/README.md",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/edonet/vscode-command-runner.git"
-	},
-	"devDependencies": {
-		"@types/node": "^16.11.4",
-		"@types/vscode": "^1.61.0",
-		"@typescript-eslint/eslint-plugin": "^5.1.0",
-		"@typescript-eslint/parser": "^5.1.0",
-		"eslint": "^8.1.0",
-		"rimraf": "^4.4.1",
-		"typescript": "^4.4.4"
-	},
-	"__metadata": {
-		"id": "c4acb5b7-168f-4561-86ef-79352610787e",
-		"publisherDisplayName": "edonet",
-		"publisherId": "56102209-e938-4a27-8dad-976ac027ac55"
-	}	
+    ],
+    "main": "./dist/extension",
+    "scripts": {
+        "build": "yarn clean && yarn compile && vsce package",
+        "compile": "tsc -p ./",
+        "lint": "eslint src --ext ts",
+        "watch": "tsc -watch -p ./",
+        "symlink": "node scripts/symlink.js",
+        "vscode:prepublish": "yarn run compile",
+        "clean": "rimraf ./dist"
+    },
+    "contributes": {
+        "commands": [
+            {
+                "command": "command-runner2.run",
+                "title": "Run Command"
+            },
+            {
+                "command": "command-runner2.runInTerminal",
+                "title": "Run In Terminal"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Run Command Configuration",
+            "properties": {
+                "command-runner2.terminal.name": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Specifies the terminal name to execute the command.",
+                    "scope": "resource"
+                },
+                "command-runner2.terminal.cwd": {
+                    "type": "string",
+                    "description": "A path or Uri for the current working directory to be used for the terminal.",
+                    "scope": "resource"
+                },
+                "command-runner2.terminal.env": {
+                    "type": "string",
+                    "description": "Object with environment variables that will be added to the VS Code process.",
+                    "scope": "resource"
+                },
+                "command-runner2.terminal.shellPath": {
+                    "type": "string",
+                    "description": "A path to a custom shell executable to be used in the terminal.",
+                    "scope": "resource"
+                },
+                "command-runner2.terminal.shellArgs": {
+                    "type": [
+                        "string",
+                        "array"
+                    ],
+                    "description": "Args for the custom shell executable. A string can be used on Windows only which allows specifying shell args in command-line format.",
+                    "scope": "resource"
+                },
+                "command-runner2.terminal.autoClear": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Clear the content of terminal before execute the command.",
+                    "scope": "resource"
+                },
+                "command-runner2.terminal.autoFocus": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Focus the terminal when execute the command.",
+                    "scope": "resource"
+                },
+                "command-runner2.commands": {
+                    "type": "object",
+                    "default": {},
+                    "description": "Set the custom command to run.",
+                    "scope": "resource"
+                },
+                "command-runner2.autoAppendSelectedFiles": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Focus the terminal when execute the command.",
+                    "scope": "resource"
+                },
+                "command-runner2.showRunCommandInEditorContextMenu": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show 'Run Command' in editor context menu",
+                    "scope": "resource"
+                },
+                "command-runner2.showRunCommandInExplorerContextMenu": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show 'Run Command' in explorer context menu",
+                    "scope": "resource"
+                }
+            }
+        },
+        "keybindings": [
+            {
+                "command": "command-runner2.run",
+                "key": "ctrl+shift+r",
+                "mac": "ctrl+shift+r"
+            },
+            {
+                "command": "command-runner2.runInTerminal",
+                "key": "ctrl+alt+r",
+                "mac": "ctrl+alt+r"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "when": "!inOutput && config.command-runner2.showRunCommandInEditorContextMenu",
+                    "command": "command-runner2.run",
+                    "group": "navigation"
+                },
+                {
+                    "when": "editorHasSelection && !inOutput && config.command-runner2.showRunCommandInEditorContextMenu",
+                    "command": "command-runner2.runInTerminal",
+                    "group": "navigation"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "when": "config.command-runner2.showRunCommandInExplorerContextMenu",
+                    "command": "command-runner2.run",
+                    "group": "navigation"
+                }
+            ]
+        }
+    },
+    "commands": {
+        "file": "cat ${file}",
+        "fileBasename": "echo ${fileBasename}",
+        "fileBasenameNoExtension": "echo ${fileBasenameNoExtension}",
+        "fileDirname": "echo ${fileDirname}",
+        "fileExtname": "echo ${fileExtname}",
+        "relativeFile": "echo ${relativeFile}",
+        "relativeFileNoExtension": "echo ${relativeFileNoExtension}",
+        "relativeFileDirname": "echo ${relativeFileDirname}",
+        "lineNumber": "echo ${lineNumber}",
+        "lineNumbers": "echo ${lineNumbers}",
+        "columnNumber": "echo ${columnNumber}",
+        "columnNumbers": "echo ${columnNumbers}",
+        "selectedFile": "echo ${selectedFile}",
+        "selectedFiles": "echo ${selectedFiles}",
+        "selectedPosition": "echo ${selectedPosition}",
+        "selectedPositionList": "echo ${selectedPositionList}",
+        "selectedLocation": "echo ${selectedLocation}",
+        "selectedLocationList": "echo ${selectedLocationList}",
+        "selectedText": "echo ${selectedText}",
+        "selectedTextList": "echo ${selectedTextList}",
+        "selectedTextSection": "echo ${selectedTextSection}",
+        "workspaceFolder": "echo ${workspaceFolder}",
+        "workspaceFolderBasename": "echo ${workspaceFolderBasename}",
+        "homedir": "echo ${homedir}",
+        "tmpdir": "echo ${tmpdir}",
+        "env": "echo '${env:PATH}'",
+        "config": "echo ${config:editor.fontSize}",
+        "command": "${command:workbench.action.openRecent}"
+    },
+    "bugs": {
+        "url": "https://github.com/edonet/vscode-command-runner2/issues",
+        "email": "edonet@163.com"
+    },
+    "homepage": "https://github.com/edonet/vscode-command-runner2/blob/master/README.md",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/edonet/vscode-command-runner2.git"
+    },
+    "devDependencies": {
+        "@types/node": "^16.11.4",
+        "@types/vscode": "^1.61.0",
+        "@typescript-eslint/eslint-plugin": "^5.1.0",
+        "@typescript-eslint/parser": "^5.1.0",
+        "eslint": "^8.1.0",
+        "rimraf": "^4.4.1",
+        "typescript": "^4.4.4"
+    },
+    "__metadata": {
+        "id": "c4acb5b7-168f-4561-86ef-79352610787e",
+        "publisherDisplayName": "edonet",
+        "publisherId": "56102209-e938-4a27-8dad-976ac027ac55"
+    }	
 }
