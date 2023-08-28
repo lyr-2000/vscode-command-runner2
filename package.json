@@ -1,8 +1,8 @@
 {
     "name": "vscode-command-runner2",
     "displayName": "Command Runner2",
-    "description": "vscode custom shell command runner, it is a fork version for vscode-command-runner2",
-    "version": "0.0.124",
+    "description": "vscode custom shell command runner 【it is a fork version for Command Runner】",
+    "version": "0.0.126",
     "icon": "images/logo.png",
     "publisher": "linyangrui",
     "engines": {
