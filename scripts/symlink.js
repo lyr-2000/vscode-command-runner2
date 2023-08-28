@@ -24,7 +24,7 @@ const path = require('path');
  */
 fs.symlink(
     path.resolve(__dirname, '../'),
-    path.resolve(os.homedir(), '.vscode/extensions/edonet.vscode-command-runner'),
+    path.resolve(os.homedir(), '.vscode/extensions/linyangrui.vscode-command-runner'),
     (err) => {
         err ? console.error(err) : console.log('Symlink successful!')
     }

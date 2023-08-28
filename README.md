@@ -35,8 +35,44 @@ or in node module package.json
 }
 ```
 
+Multiple commands can be executed sequentially with
+Here is an example of formatting golang code
+
+```json
+{
+    "command-runner2.commands": {
+        "go.format": [
+            "IFS=;text=$(cat <<EOFL\n${selectedText}\n\nEOFL\n); echo $text | gofmt | iconv -f UTF-8 -t GBK | clip",
+            "${command:workbench.action.focusActiveEditorGroup}",
+            "${command:editor.action.clipboardPasteAction}",
+        ],
+    }
+}
+
+```
+
+Call a link remotely, and a pop-up window displays the result of the request
+
+```json
+{
+ "command-runner2.commands": {
+    "cht.sh": [
+        "${command:workbench.action.newGroupRight}${command:workbench.action.files.newUntitledFile}IFS=;text=$(curl -s cht.sh/${input}?style=bw); echo $text | clip",
+        "${command:editor.action.clipboardPasteAction}"
+    ],
+    "curls": [
+        "${command:workbench.action.newGroupRight}${command:workbench.action.files.newUntitledFile}IFS=;text=$(curl -s ${input}); echo $text | clip",
+        "${command:editor.action.clipboardPasteAction}"
+    ],
+    "demo": "echo helloworld",
+ }
+}
+```
+
 ## Key Binding
+
 You can bind custom keys for the command which defined in configuration
+
 ```json
 {
     "key": "ctrl+alt+1",
@@ -46,7 +82,9 @@ You can bind custom keys for the command which defined in configuration
 ```
 
 ## Terminal Options
+
 You can customize the terminal for the command
+
 ```json
 {
     "key": "ctrl+alt+1",
@@ -57,7 +95,9 @@ You can customize the terminal for the command
     }
 }
 ```
+
 or
+
 ```json
 {
     "key": "ctrl+alt+1",
@@ -72,6 +112,27 @@ or
         }
     }
 }
+```
+
+### vim keybinding
+
+```json
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "g","f"
+            ],
+            "commands": [
+                {
+                    "command": "command-runner2.run",
+                    "args": {
+                        "command": "go.format"
+                    }
+                }
+            ]
+        },
+
+
 ```
 
 ## Predefined Variable

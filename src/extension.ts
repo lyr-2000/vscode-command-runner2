@@ -57,7 +57,7 @@ export function activate(context: vscode.ExtensionContext): void {
                 const clipboardFiles = await vscode.env.clipboard.readText();
                 clipboardFiles.split(/\r?\n/).forEach(f => command.addFile(f));
             }
-
+            debugger;
             // 判断是否是数组类型
             // const target = command.commands[cmd]
             // debugger;
@@ -70,7 +70,11 @@ export function activate(context: vscode.ExtensionContext): void {
             // }
             // 执行命令
             if (cmd) {
-                return command.execute(command.commands[cmd] || cmd, opts.terminal);
+                const cmdx = command.commands[cmd] || cmd
+                if (Array.isArray(cmdx)) {
+                    return command.executeMultipleCommand(cmdx, opts.terminal,cmd);
+                }
+                return command.execute(cmdx, opts.terminal);
             }
 
             // 选择命令并执行

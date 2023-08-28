@@ -16,7 +16,7 @@
             "outFiles": [
 				"${workspaceFolder}/src/**/*.js"
 			],
-			"preLaunchTask": "npm: watch"
+			// "preLaunchTask": "npm: watch"
         },
         {
             "name": "Extension Tests",

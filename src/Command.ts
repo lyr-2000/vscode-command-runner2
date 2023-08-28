@@ -37,12 +37,21 @@ function createTerminal(options: vscode.TerminalOptions):vscode.Terminal {
     const { window } = vscode;
     const { name } = options;
 
+    // if(options.env==null) {
+    //     options.env = {
+    //         "SHELL":"",
+    //     }
+    // }
     // 指定终端
     if (name && typeof name === 'string') {
-        return (
-            window.terminals.find(term => term.name === name) ||
-            window.createTerminal(options)
-        );
+        let pre = window.terminals.find(term => term.name === name) 
+        if (pre) {
+            return pre 
+        }
+        
+        pre = window.createTerminal(options)
+        pre.sendText(`bind 'set disable-completion on'`,true)
+        return pre;
     }
 
     // 使用默认终端
@@ -153,9 +162,10 @@ export default class Command {
                 return
             }
             const target = commands[cmd]
+            // debugger;
             // 执行命令
             if (Array.isArray(target)) {
-                await this.executeMultipleCommand(target, options);
+                await this.executeMultipleCommand(target, options,cmd);
             } else {
                 await this.execute(target, options);
             }
@@ -166,7 +176,7 @@ export default class Command {
         }
     }
     // 执行一组命令
-    public async executeMultipleCommand(commands: string[], options?: TerminalOptions) {
+    public async executeMultipleCommand(commands: string[], options?: TerminalOptions,key?: string) {
         // for (let  i=0;i<commands.length;i++) {
         //     // options?.autoClear = true
         //     await this.execute(commands[i], options);
@@ -209,26 +219,29 @@ export default class Command {
 
             
             await vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup')
+            // debugger;
             // 写入命令
             let theFinalCmd = await this.resolve(command, predefined)
-
-
             try {
                 if (!theFinalCmd) {
                     continue
                 }
-                let name = terminalOptions.name+'-'+String(i+1)+':'+theFinalCmd.substring(0,10)
+                let name = terminalOptions.name || key +'-'+String(i+1)+':'+theFinalCmd.substring(0,10)
                 // let cur = {terminalOptions...}
                 // cur.name = name
                 terminalOptions.name = name
                 await this.waitTerminalForExit(null,theFinalCmd, terminalOptions)
+                // await vscode.commands.executeCommand('workbench.action.terminal.clear');
+                // if (i == commands.length-1) {
+                //     await vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup')
+                // }
             } catch (e) {
                 console.error(e)
             }
         }
 
         // 输出命令信息
-        // console.log('--> Run Command:', command);
+        console.log('--> Run Command:', commands);
     }
     // public async waitForTerminalStateChange(terminal0: any, command, terminalOptions) {
     //     const terminal = terminal0 || createTerminal(terminalOptions);
@@ -259,11 +272,10 @@ export default class Command {
         // location?: vscode.TerminalLocation
     ): Promise<vscode.TerminalExitStatus> {
         const terminal = terminal0 || createTerminal(terminalOptions);
-        // terminal.show();
-        terminal.show(true);
+        terminal.show()
         terminal.sendText(command, false);
         terminal.sendText("; exit");
-
+        
         return new Promise((resolve, reject) => {
 
             const disposeToken = vscode.window.onDidCloseTerminal(

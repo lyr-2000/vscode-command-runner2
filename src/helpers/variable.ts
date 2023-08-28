@@ -323,7 +323,7 @@ export default () => cache({
     /* 命令集 */
     commands(): Record<string, any> {
         return {
-            ...this.config().get('command-runner.commands'),
+            ...this.config().get('command-runner2.commands'),
             ...this.package()['commands'] as object,
         };
     },
